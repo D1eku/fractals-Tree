@@ -15,12 +15,40 @@ def arbolSimple(tam, prof):
 		turtle.left(45)#gira a la izquierda 45 grados
 		turtle.back(tam)#dibuja una linea de tamaño tam
 
+def variacionColor(color, var):
+	# A la tupla de color 
+	# Los hace variar en "var" %
+	# Luego devuelve el valor nuevo de la tupla color.
+	Rd = random.randrange(-var, var+1)
+	Gd = random.randrange(-var, var+1)
+	Bd = random.randrange(-var, var+1)
+	
+	R, G, B  = color
+	
+	R += Rd
+	G += Gd
+	B += Bd
+	
+	if R > 255:
+		R = 255
+	elif R < 0:
+		R = 0
+	if G > 255:
+		G = 255
+	elif G < 0:
+		G = 0
+	if B > 255:
+		B = 255
+	elif B < 0:
+		B = 0
+	return R, G, B
+
 #Funcion que dibuja una hoja
 def hoja(t,a):
 	# El valor "t" indica el tamaño del radio de los semicirculos que se generaran
 	# El valor "a" indica el angulo en que los semicurculos se uniran
 	# Mientras mas cerrado sea "a", la hoja tendra un apariencia mas alargada
-	turtle.color("Green") # Cambia de color a verde
+	turtle.color(variacionColor(colorHojas, colorHojasVar))# Varia el color de las hojas
 	turtle.begin_fill()# Comienza relleno
 	turtle.right(a/2)#gira a la derecha con a/2 grados
 	turtle.circle(t,a)#dibuja un circulo de radio "t" y con angulo "a"
@@ -28,50 +56,64 @@ def hoja(t,a):
 	turtle.circle(t,a)#dibuja un circulo de radio "t" y angulo "a"
 	turtle.left(180-a/2)#gira a la izquierda 180-a/2 grados
 	turtle.end_fill()# Termina de rellenar
-	turtle.color("Black")# Cambia de color a negro
 
-ANG = 20
-RAND = 10
-REL = 2/3
-RANDT = 60
-GROSORTRONCO = 2
-TAMINIC = 150
-TAMHOJA = 10
-ANGHOJA = 60
-PROF = 10
+#Variables de control de tamaño del dibujo del arbol
 
+ANG = 45 #Angulo de rotacion basico de las ramas
+RAND = 0 # Numero random de cambio del angulo de las ramas
+REL = 2/3 # Proporcion para las nuevas ramas
+RANDT = 20 # Porcentaje de cambio del tamaño entre cada rama
+GROSORTRONCO = 2 #Grosor inicial del tronco
+TAMINIC = 150 # Tamaño inicial del tronco
+TAMHOJA = 5 # Tamaño de las hojas
+ANGHOJA = 60 # Angulo de las hojas
+PROF = 10 #Cantidad maxima de profundidad del arbol
+
+#Variables de colores del arbol
+colorTronco = (97,56,11) #Color del tronco
+colorTroncoVar = 30 #Variacion de color del tronco
+colorHojas = (10,190,80) #Color de las hojas
+colorHojasVar = 100 #Variacion de color de las Hojas
+colorFondo = (255,255,255) #Color del fondo
 
 def arbol(t, d):
-	if d==0:
-		turtle.forward(t)
-		hoja(TAMHOJA, ANGHOJA)
-		turtle.penup()
-		turtle.back(t)
-		turtle.pendown()
-		return
-	else:
-		angulo1 = ANG + random.randrange(-RAND, RAND+1)
-		angulo2 = ANG + random.randrange(-RAND, RAND+1)
-		tamano = t + t * random.randrange(-RANDT, RANDT+1)/100
-		turtle.pensize(d+GROSORTRONCO)
-		turtle.forward(tamano)
-		arbol(t*REL, d-1)
-		turtle.left(angulo2)
-		turtle.penup()
-		turtle.back(tamano)
-		turtle.pendown()
+	if d==0:#Si la dimension en 0 
+		turtle.forward(t) # Dibuja una linea de temañano "t"
+		hoja(TAMHOJA, ANGHOJA)#Dibuja una hoja
+		turtle.up()# levanta el lapiz 
+		turtle.back(t)# vuelve hacia atras en "t" distancia
+		turtle.pd()# baja el lapiz para volver a dibujar
+		turtle.color(colorTronco)
+		return#termina
+	else:#Si la dimension es distinto de 0
+		turtle.color(colorTronco)
+		angulo1 = ANG + random.randrange(-RAND, RAND+1)#Obtiene unangulo1 generado random entre RAND
+		angulo2 = ANG + random.randrange(-RAND, RAND+1)#Obtiene un angulo2 generado random entre RAND
+		tamano = t + t * random.randrange(-RANDT, RANDT+1)/100#genera el tamaño o el largo a dibujar
+		turtle.pensize(d+GROSORTRONCO)# define el tamaño del pincel
+		turtle.forward(tamano)#dibuja una linea de tamaño "tamano"
+		turtle.left(angulo1)#gira a la izquierda en "angulo1" grados
+		arbol(t*REL, d-1)# dibuja un arbol nuevo con profundidad menor y con relacion al tamaño del arbol inicial
+		turtle.right(angulo1+angulo2)#rota a la izquierda en "angulo1 + angulo2" grados
+		arbol(t*REL, d-1)# dibuja un arbol nuevo con profundidad menor y con relacion al tamaño del arbol inicial
+		turtle.left(angulo2)#gira a la izquierda en "angulo2" grados
+		turtle.up()#levanta el lapiz
+		turtle.back(tamano)# vuelve hacia atras en "t" distancia
+		turtle.pd()#baja el lapiz
 	
 
-	
-#Baja el centro del lapiz sin dibujar nada
-turtle.penup()
-turtle.right(90)
-turtle.forward(300)
-turtle.right(270)
-turtle.pendown()
 
 #Dibuja
-turtle.speed(0)
-turtle.left(90)
-arbol(150, 8)
-turtle.done()
+turtle.up()
+turtle.right(90)
+turtle.forward(200)
+turtle.right(270)
+turtle.down()
+
+turtle.hideturtle()
+turtle.colormode(255)
+turtle.speed(0)#Define la velocidad de dibujado en maxima velocidad
+turtle.left(90)#Gira a la izquierda en 90 grados
+turtle.color("Brown")
+arbol(TAMINIC, PROF)#Dibuja un arbol de tamaño "TAMINIC" y profundidad "PROF"
+turtle.done()#Espera el cierre
