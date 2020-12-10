@@ -43,6 +43,12 @@ def variacionColor(color, var):
 		B = 0
 	return R, G, B
 
+def randomColor():
+	R = random.randint(0, 255)
+	G = random.randint(0, 255)
+	B = random.randint(0, 255)
+	return R,G,B
+	
 #Funcion que dibuja una hoja
 def hoja(t,a):
 	# El valor "t" indica el tamaño del radio de los semicirculos que se generaran
@@ -57,6 +63,18 @@ def hoja(t,a):
 	turtle.left(180-a/2)#gira a la izquierda 180-a/2 grados
 	turtle.end_fill()# Termina de rellenar
 
+def randomTree():
+	Angulo = random.randint(0,45)
+	r1 = random.randrange(1, 4)
+	r2 = random.randint(5,9)
+	relacionCrecimiento = r1/r2
+	tamInit = random.randint(20,200)
+	return Angulo, relacionCrecimiento, tamInit
+
+def randomHoja():
+	tamHoja = random.randint(1,15)
+	anguloHoja = random.randint(10,180)
+	return tamHoja, anguloHoja
 #Variables de control de tamaño del dibujo del arbol
 
 ANG = 45 #Angulo de rotacion basico de las ramas
@@ -75,6 +93,12 @@ colorTroncoVar = 30 #Variacion de color del tronco
 colorHojas = (10,190,80) #Color de las hojas
 colorHojasVar = 100 #Variacion de color de las Hojas
 colorFondo = (255,255,255) #Color del fondo
+
+
+#Colores random
+
+colorTronco = randomColor()#Genera un color random para el tronco
+colorHojas = randomColor()#Genera un color random para las hojas
 
 def arbol(t, d):
 	if d==0:#Si la dimension en 0 
